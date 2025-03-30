@@ -1,6 +1,7 @@
-
+import React from "react";
 
 function Form({ todos, setTodos }) {
+    const [saved, setSave] = React.useState(false)
     const handleSubmit = (event) => {
       event.preventDefault();
       const title = event.target.title.value;
@@ -18,7 +19,8 @@ function Form({ todos, setTodos }) {
       // Store updated todo list in local storage
       const updatedTodoList = JSON.stringify([...todos, newTodo]);
       localStorage.setItem("todos", updatedTodoList);
-      event.target.reset();
+      setSave(true);
+      console.log(saved);
     };
     return (
       <form className="form" onSubmit={handleSubmit}>
@@ -45,10 +47,7 @@ function Form({ todos, setTodos }) {
             id="time"
           />
         </label>
-        <button>
-            <span className="visually-hidden">Submit</span>
-            +
-        </button>
+        {saved ? <p className="saved">The task has been added!</p> : <button className="button"><span className="visually-hidden">Submit</span>+</button>}
       </form>
     );
   }

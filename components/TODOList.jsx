@@ -1,25 +1,33 @@
 // src/components/TODOList.jsx
 import React from "react";
+import Link from 'next/link'
 
 function TODOList({ todos, setTodos }) {
+    const [completedFilter, setCompletedFilter] = React.useState(null);
+    const filteredTodos = todos.filter((todo) => completedFilter === null || todo.is_completed === completedFilter);
+    const toggleCompletedFilter = () => {
+      setCompletedFilter(!completedFilter);
+    };
+    const removeFilters = () => {
+      setCompletedFilter(null);
+    };
     return (
-      <>
+      <div className="form">
+        <div><b>Filter (completed/uncompleted): </b><button className={completedFilter ? "completed" : "notCompleted"} onClick={toggleCompletedFilter}>{completedFilter ? <>&#x2713;</> : <></>}</button></div>
+        <button className="button" onClick={removeFilters}>Show all</button>
         <ol className="todo_list">
-          {todos && todos.length > 0 ? (
-            todos?.map((item, index) => <Item key={index} item={item} todos={todos} setTodos={setTodos} />)
+          {filteredTodos && filteredTodos.length > 0 ? (
+            filteredTodos?.map((item, index) => <Item key={index} item={item} todos={todos} setTodos={setTodos} />)
           ) : (
             <p>There a currently no tasks.</p>
           )}
         </ol>
-      </>
+      </div>
     );
   }
   export default TODOList;
 
 function Item({ item, todos, setTodos }) {
-    const [editing, setEditing] = React.useState(false);
-    const inputRef = React.useRef(null); 
-     
     const completeTodo = () => {
       setTodos((prevTodos) =>
         prevTodos.map((todo) =>
@@ -30,45 +38,12 @@ function Item({ item, todos, setTodos }) {
       );
 
       // Update localStorage after marking todo as completed
-      const updatedTodos = JSON.stringify(todos);
+      const updatedTodos = JSON.stringify(todos.map((todo) =>
+        todo.id === item.id
+          ? { ...todo, is_completed: !todo.is_completed }
+          : todo
+      ));
       localStorage.setItem("todos", updatedTodos);
-    };
-
-    const handleEdit = () => {
-      setEditing(true);
-    };
-
-    React.useEffect(() => {
-      if (editing && inputRef.current) {
-        inputRef.current.focus();
-        // position the cursor at the end of the text
-        inputRef.current.setSelectionRange(
-          inputRef.current.value.length,
-          inputRef.current.value.length
-        );
-      }
-    }, [editing]);
-
-    const handleInputSubmit = (event) => {
-      event.preventDefault();
-      const updatedTodos = JSON.stringify(todos);
-      localStorage.setItem("todos", updatedTodos);
-      setEditing(false);
-    };
-
-    const handleInputBlur = () => {
-      // Update localStorage after editing todo
-      const updatedTodos = JSON.stringify(todos);
-      localStorage.setItem("todos", updatedTodos);
-      setEditing(false);
-    };
-
-    const handleInputChange = (e) => {
-      setTodos((prevTodos) =>
-        prevTodos.map((todo) =>
-          todo.id === item.id ? { ...todo, title: e.target.value } : todo
-        )
-      );
     };
 
     const handleDelete = () => {
@@ -82,22 +57,6 @@ function Item({ item, todos, setTodos }) {
 
     return (
       <li id={item?.id} className="todo_item">
-        {editing ? (
-        <form className="edit-form" onSubmit={handleInputSubmit}>
-          <label htmlFor="edit-todo">
-            <input
-              ref={inputRef}
-              type="text"
-              name="edit-todo"
-              id="edit-todo"
-              defaultValue={item?.title}
-              onBlur={handleInputBlur}
-              onChange={handleInputChange}
-            />
-          </label>
-        </form>
-      ) : (
-        <>
           <button className="todo_items_left" onClick={completeTodo}>
             <div className={item.is_completed ? "completed" : "notCompleted"}>{item.is_completed ? <>&#x2713;</> : <></>}</div>
             <p style={item.is_completed ? { textDecoration: "line-through" } : {}}>
@@ -108,17 +67,20 @@ function Item({ item, todos, setTodos }) {
             </p>
           </button>
           <div className="todo_items_right">
-              <button onClick={handleEdit}>
-                <span className="visually-hidden">Edit</span>
-                Edit
-              </button>
+              <Link href={{
+                  pathname: '/detail',
+                  query: { id: item.id }
+                }}>
+                <button>
+                  <span className="visually-hidden">Detail</span>
+                  Detail
+                </button>
+              </Link>
               <button onClick={handleDelete}>
                 <span className="visually-hidden">Delete</span>
                 Delete
               </button>
           </div>
-        </>
-      )}
       </li>
     );
   }

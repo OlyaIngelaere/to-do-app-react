@@ -1,13 +1,15 @@
 // src/app/page.js
 'use client';
 import React from "react";
-import TODOHero from "@/components/TODOHero";
-import TODOList from "@/components/TODOList";
+import Detail from "@/components/Detail";
 import Link from 'next/link'
+import { useSearchParams } from 'next/navigation'
 
-function Home() {
+function DetailPage() {
+  const searchParams = useSearchParams();
+  const id = searchParams.get('id');
   const [todos, setTodos] = React.useState([]);
-
+  const todo = todos.filter((todo) => todo.id === id)[0];
   // Retrieve data from localStorage when component mounts
   React.useEffect(() => {
     const storedTodos = localStorage.getItem("todos");
@@ -15,25 +17,18 @@ function Home() {
       setTodos(JSON.parse(storedTodos));
     }
   }, []);
-
-  const todos_completed = todos.filter(
-    (todo) => todo.is_completed === true
-  ).length;
-  const total_todos = todos.length;
   
   return (
     <div className="wrapper">
-      <TODOHero todos_completed={todos_completed} total_todos={total_todos} />
       <Link href={{
-        pathname: '/form'
+        pathname: '/'
       }}>
         <button className="button">
-            <span className="visually-hidden">Submit</span>
-            +
+            Overview
         </button>
       </Link>
-      <TODOList todos={todos} setTodos={setTodos} />
+      <Detail todo={todo} />
     </div>
   );
 }
-export default Home;
+export default DetailPage;
