@@ -9,8 +9,8 @@
 html,
 body {
   font-family: sans-serif;
-  background-color: lightblue;
-  color: black;
+  background-color: black;
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -60,7 +60,7 @@ a {
   align-self: center;
 }
 .todohero_section {
-  border: 1px solid black;
+  border: 1px solid white;
   display: flex;
   align-items: center;
   justify-content: space-around;
@@ -72,7 +72,7 @@ a {
   margin: 20px;
 }
 .todohero_section div:last-child {
-  background-color: darkturquoise;
+  background-color: rgb(151, 19, 63);
   width: 150px;
   height: 150px;
   border-radius: 75px;
@@ -96,25 +96,27 @@ a {
   width: 90%;
 }
 .form input {
-  background-color: darkturquoise;
+  background-color: rgb(151, 19, 63);
   width: 100%;
   height: 50px;
   outline: none;
   border: none;
   border-radius: 11px;
   padding: 12px;
+  color: white;
 }
 .button {
   width: fit-content;
   padding: 10px 20px;
   height: 50px;
   border-radius: 11px;
-  background-color: darkturquoise;
+  background-color: rgb(151, 19, 63);
+  color: white;
   border: none;
   font-size: 18px;
 }
 .button:hover {
-  background-color: turquoise;
+  background-color: rgb(172, 28, 76);
 }
 .todo_list {
   align-self: center;
@@ -135,9 +137,9 @@ a {
   height: 70px;
   width: 100%;
   max-width: 455px;
-  border: 1px solid black;
+  border: 1px solid white;
   font-size: 16px;
-  background-color: darkturquoise;
+  background-color: rgb(151, 19, 63);
   padding: 12px;
 }
 .edit-form input {
@@ -150,6 +152,7 @@ a {
 .todo_items_right {
   display: flex;
   align-items: center;
+  color: white;
 }
 .todo_items_left {
   background-color: transparent;
@@ -164,12 +167,13 @@ a {
 .todo_items_right button {
   background-color: transparent;
   border: none;
+  color: white;
 }
 
 .completed {
     width:24px;
     height:24px;
-    border:2px solid #000;
+    border:2px solid white;
     border-radius:100px;
     background-color: #22C55E;
     padding: 0px 4px;
@@ -178,7 +182,7 @@ a {
 .notCompleted {
     width:24px;
     height:24px;
-    border:2px solid #000;
+    border:2px solid white;
     border-radius:100px;
     padding: 6px;
 }
